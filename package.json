@@ -1,0 +1,23 @@
+{
+  "name": "electronjs-hello-world",
+  "version": "1.0.0",
+  "description": "This is a sample app created with Nodejs and Electronjs frameworks.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielpm1982/electronjs-hello-world.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danielpm1982/electronjs-hello-world/issues"
+  },
+  "homepage": "https://github.com/danielpm1982/electronjs-hello-world#readme",
+  "devDependencies": {
+    "electron": "9.2.0"
+  }
+}
