@@ -1,0 +1,30 @@
+body{
+    background-color: black;
+    color: white;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 1.5em;
+    margin-top: 5%;
+}
+div.centralText{
+  width: 70%;
+  margin: auto;
+  margin-top: 2em;
+  text-align: justify;
+  border: dashed white thin;
+  padding: 0em 1em 0em 1em;
+}
+img#electronjs, img#nodejs-npm{
+  margin-right: 1em;
+  margin-left: 1em;
+}
+img#electronjs{
+  width: 200px;
+}
+img#nodejs-npm{
+  width: 250px;
+}
+div.centralImages{
+  width: 80%;
+  margin: 1.5em auto 1.5em auto;
+}

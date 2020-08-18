@@ -1,7 +1,7 @@
 {
   "name": "electronjs-hello-world",
   "version": "1.0.0",
-  "description": "This is a sample app created with Nodejs and Electronjs frameworks.",
+  "description": "This is a sample app created with Nodejs (JavaScript runtime built on the V8 JavaScript engine), npm (node package manager) and Electronjs framework.",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
