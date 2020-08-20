@@ -2,8 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
-    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <title>Electronjs Hello World App</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
     <link rel="stylesheet" href="css/css.css" />
   </head>
@@ -20,21 +19,6 @@
     <!-- We are using node <script>document.write(process.versions.node)</script>,
     Chrome <script>document.write(process.versions.chrome)</script>,
     and Electron <script>document.write(process.versions.electron)</script>. -->
-    <script>
-      // Catches username value that was sent from the login window to the main.js, and from there to here.
-      // Applies the username value to the welcome message at the span node element - instead of 'World', and turns color greenyellow.
-      // On logout, resets the original text and color.
-      const electron = require('electron');
-      const {ipcRenderer} = electron;
-      const spanElement = document.querySelector('span');
-      ipcRenderer.on('username', function(e, username){
-        spanElement.innerHTML = username;
-        spanElement.style.color='greenyellow';
-      })
-      ipcRenderer.on('logout', function(){
-        spanElement.innerHTML = 'World';
-        spanElement.style.color='white';
-      })
-    </script>
+    <script src="index.js"></script>
   </body>
 </html>

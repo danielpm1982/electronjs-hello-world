@@ -52,6 +52,26 @@ div.centralTextAbout div.leftAlign span.linkDescription{
   color: greenyellow;
   margin-right: 1em;
 }
+div.centralTextOpenWeather{
+  margin-bottom: 2em;
+  position: relative;
+  top: 1em;
+}
+div.centralTextWeatherResponse{
+  margin-left: 18%;
+}
+div.centralTextWeatherResponse p{
+  text-align: left;
+}
+footer#footerTextWeatherResponse{
+  text-align: center;
+  font-style: italic;
+}
+footer#footerTextWeatherResponse p{
+  font-size: 0.8em;
+  margin-top: 2em;
+  margin-bottom: 3em;
+}
 img#electronjs, img#nodejs-npm{
   margin-right: 1em;
   margin-left: 1em;
@@ -68,22 +88,36 @@ img#login{
 img#about{
   width: 200px;
 }
+img#openWeather{
+  width: 300px;
+}
+img#weatherResponse{
+  width: 150px;
+}
 div.centralImages{
   width: 80%;
   margin: 1.5em auto 1.5em auto;
 }
 div.centralImageLogin{
   width: 80%;
-  margin: 1.5em auto 1.5em auto;
+  margin: 3em auto 2em auto;
 }
 div.centralImageAbout{
   width: 80%;
-  margin: 1.5em auto 1.5em auto;
+  margin: 3em auto 3em auto;
+}
+div.centralImageOpenWeather{
+  width: 80%;
+  margin: 1.5em auto 0em auto;
+}
+div.centralImageWeatherResponse{
+  width: 80%;
+  margin: 2em auto 1.5em auto;
 }
 form{
   padding: 1.5em;
 }
-form input#username, input#password{
+form input#username, input#password, input#city{
   font-size: 1.4em;
   margin-bottom: 1em;
   padding: 0.3em;

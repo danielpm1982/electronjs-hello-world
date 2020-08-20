@@ -3,6 +3,8 @@ const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 let win;
 let loginWin;
 let aboutWin;
+let currentWeatherWin;
+let currentWeatherResponseWin;
 
 // Set environment variable NODE_ENV as: 'production', 'development' or other
 // Development Tools will only appear on the menu if NOT in 'production' environment
@@ -14,12 +16,13 @@ function createWindow () {
   win = new BrowserWindow({
     width: 1000,
     height: 700,
+    resizable: false,
     webPreferences: {
       nodeIntegration: true
     }
   })
 
-  // and load the index.html of the app.
+  // and load the respective web page to be rendered on the window
   win.loadFile('app/index.html')
 
   // Quit app when this main window closes
@@ -38,14 +41,14 @@ function createLoginWindow(){
   loginWin = new BrowserWindow({
     width: 850,
     height: 550,
-    title: 'Login to your account',
-    alwaysOnTop: true,
+    resizable: false,
+    alwaysOnTop: true,  
     webPreferences: {
       nodeIntegration: true
     }
   })
   
-  // and load the login.html of the app.
+  // and load the respective web page to be rendered on the window
   loginWin.loadFile('app/login.html')
 
   // Optimize Garbage Collector handle
@@ -53,10 +56,8 @@ function createLoginWindow(){
     loginWin = null;
   })
 
-  //Create main menu from template
-  const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
-  //Insert menu
-  Menu.setApplicationMenu(mainMenu);
+  // Turn off visibility for menu on this window
+  loginWin.setMenuBarVisibility(false);
 }
 
 function createAboutWindow(){
@@ -64,34 +65,72 @@ function createAboutWindow(){
   aboutWin = new BrowserWindow({
     width: 800,
     height: 520,
-    title: 'About this App',
+    resizable: false,
+    alwaysOnTop: true,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
+
+  // and load the respective web page to be rendered on the window
+  aboutWin.loadFile('app/about.html')
+
+  // Optimize Garbage Collector handle
+  aboutWin.on('closed', function(){
+    aboutWin = null;
+  })
+
+  // Turn off visibility for menu on this window
+  aboutWin.setMenuBarVisibility(false);
+}
+
+function createCurrentWeatherWindow(){
+  // Create the browser window.
+  currentWeatherWin = new BrowserWindow({
+    width: 800,
+    height: 520,
+    resizable: false,
     alwaysOnTop: true,
     webPreferences: {
       nodeIntegration: true
     }
   })
   
-  // and load the about.html of the app.
-  aboutWin.loadFile('app/about.html')
+  // and load the respective web page to be rendered on the window
+  currentWeatherWin.loadFile('app/current-weather.html')
 
   // Optimize Garbage Collector handle
-  aboutWin.on('closed', function(){
-    loginWin = null;
+  currentWeatherWin.on('closed', function(){
+    currentWeatherWin = null;
   })
 
-  //Create main menu from template
-  const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
-  //Insert menu
-  Menu.setApplicationMenu(mainMenu);
+  // Turn off visibility for menu on this window
+  currentWeatherWin.setMenuBarVisibility(false);
 }
 
-// Catch username sent from login.html window and send for the main window to catch
-// Validation of password not implemented yet - no authentication actually occurs, only a simulation of it
-ipcMain.on('username', function(e, username){
-  win.webContents.send('username', username);
-  // Closes the login window when the form data is sent to the main.js
-  loginWin.close();
-})
+function createCurrentWeatherResponseWindow(){
+  // Create the browser window.
+  currentWeatherResponseWin = new BrowserWindow({
+    width: 600,
+    height: 820,
+    resizable: false,
+    alwaysOnTop: true,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  })
+  
+  // and load the respective web page to be rendered on the window
+  currentWeatherResponseWin.loadFile('app/current-weather-response.html')
+
+  // Optimize Garbage Collector handle
+  currentWeatherResponseWin.on('closed', function(){
+    currentWeatherResponseWin = null;
+  })
+
+  // Turn off visibility for menu on this window
+  currentWeatherResponseWin.setMenuBarVisibility(false);
+}
 
 //Create main menu template
 const mainMenuTemplate = [
@@ -117,6 +156,18 @@ const mainMenuTemplate = [
         accelerator: process.platform == 'darwin' ? 'Command+Q': 'Ctrl+Q',
         click(){
           app.quit();
+        }
+      }
+    ]
+  },
+  {
+    label: 'WebService',
+    submenu:[
+      {
+        label: 'Weather',
+        accelerator: process.platform == 'darwin' ? 'Command+W': 'Ctrl+W',
+        click(){
+          createCurrentWeatherWindow();
         }
       }
     ]
@@ -180,3 +231,25 @@ if(process.env.NODE_ENV != 'production'){
     ]
   })
 }
+
+// Catch username sent from loginWin window and send for the main win window to catch
+// Validation of password not yet implemented - no authentication actually occurs, only a simulation of it - for now...
+ipcMain.on('username', function(e, username){
+  // Close the loginWin window when the form data is already sent to the main.js
+  loginWin.close();
+  // Send the username for the main win window to catch
+  win.webContents.send('username', username);
+})
+
+// Catch weatherInfoObj sent from currentWeatherWin window and send for the currentWeatherResponseWin window to catch
+ipcMain.on('weatherInfoObj', function(e, weatherInfoObj){
+  // Close the currentWeatherWin window when the weatherInfoObj is sent to the main.js
+  currentWeatherWin.close();
+  // Create the currentWeatherResponseWin window
+  createCurrentWeatherResponseWindow();
+  // Create 100ms delay, before sending weatherInfoObj to the response window, for avoiding sending before the window is even created
+  setTimeout(() => {
+    // Send the weatherInfoObj for the currentWeatherResponseWin to catch - the window must already have been created !
+    currentWeatherResponseWin.webContents.send('weatherInfoObj', weatherInfoObj);  
+  }, 100);
+})
