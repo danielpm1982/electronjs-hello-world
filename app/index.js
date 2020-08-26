@@ -4,11 +4,11 @@
 const electron = require('electron');
 const {ipcRenderer} = electron;
 const spanElement = document.querySelector('span');
-ipcRenderer.on('username', function(e, username){
+ipcRenderer.on('username', (e, username)=>{
   spanElement.innerHTML = username;
   spanElement.style.color='greenyellow';
 })
-ipcRenderer.on('logout', function(){
+ipcRenderer.on('logout', ()=>{
   spanElement.innerHTML = 'World';
   spanElement.style.color='white';
 })

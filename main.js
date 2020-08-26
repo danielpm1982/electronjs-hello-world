@@ -1,18 +1,16 @@
+// destructuring some of electron module's objects for later use
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 
-let win;
-let loginWin;
-let aboutWin;
-let currentWeatherWin;
-let currentWeatherResponseWin;
+let win, loginWin, aboutWin, currentWeatherWin, currentWeatherResponseWin;
 
 // Set environment variable NODE_ENV as: 'production', 'development' or other
 // Development Tools will only appear on the menu if NOT in 'production' environment
 // Just uncomment the following line to change to production environment and make Developer Tools disappear
 // process.env.NODE_ENV = 'production';
 
+// Create main app window
 function createWindow () {
-  // Create the browser window.
+  // Create the browser window
   win = new BrowserWindow({
     width: 1000,
     height: 700,
@@ -32,12 +30,14 @@ function createWindow () {
 
   //Create main menu from template
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+
   //Insert menu
   Menu.setApplicationMenu(mainMenu);
 }
 
+// Create login window
 function createLoginWindow(){
-  // Create the browser window.
+  // Create the browser window
   loginWin = new BrowserWindow({
     width: 850,
     height: 550,
@@ -60,8 +60,9 @@ function createLoginWindow(){
   loginWin.setMenuBarVisibility(false);
 }
 
+// Create about window
 function createAboutWindow(){
-  // Create the browser window.
+  // Create the browser window
   aboutWin = new BrowserWindow({
     width: 800,
     height: 520,
@@ -84,8 +85,9 @@ function createAboutWindow(){
   aboutWin.setMenuBarVisibility(false);
 }
 
+// Create current weather window
 function createCurrentWeatherWindow(){
-  // Create the browser window.
+  // Create the browser window
   currentWeatherWin = new BrowserWindow({
     width: 800,
     height: 520,
@@ -108,11 +110,12 @@ function createCurrentWeatherWindow(){
   currentWeatherWin.setMenuBarVisibility(false);
 }
 
+// Create current weather response window
 function createCurrentWeatherResponseWindow(){
-  // Create the browser window.
+  // Create the browser window
   currentWeatherResponseWin = new BrowserWindow({
-    width: 600,
-    height: 820,
+    width: 700,
+    height: 860,
     resizable: false,
     alwaysOnTop: true,
     webPreferences: {
@@ -132,7 +135,7 @@ function createCurrentWeatherResponseWindow(){
   currentWeatherResponseWin.setMenuBarVisibility(false);
 }
 
-//Create main menu template
+//Create main menu template for the Menu to be built from
 const mainMenuTemplate = [
   {
     label: 'File',
@@ -161,10 +164,18 @@ const mainMenuTemplate = [
     ]
   },
   {
-    label: 'WebService',
+    label: 'View',
     submenu:[
       {
-        label: 'Weather',
+        role: 'reload'
+      }
+    ]
+  },
+  {
+    label: 'Services',
+    submenu:[
+      {
+        label: 'Current Weather',
         accelerator: process.platform == 'darwin' ? 'Command+W': 'Ctrl+W',
         click(){
           createCurrentWeatherWindow();
@@ -216,7 +227,7 @@ if(process.platform=='darwin'){
 // Show development tools only if NOT in production.
 if(process.env.NODE_ENV != 'production'){
   mainMenuTemplate.push({
-    label: 'Developer Tools',
+    label: 'Developer',
     submenu:[
       {
         label: 'Toggle DevTools',
@@ -224,9 +235,6 @@ if(process.env.NODE_ENV != 'production'){
         click(item, focusedWindow){
           focusedWindow.toggleDevTools();
         }
-      },
-      {
-        role: 'reload'
       }
     ]
   })

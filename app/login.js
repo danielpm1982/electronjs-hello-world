@@ -5,7 +5,7 @@ const {ipcRenderer} = electron;
 const form = document.querySelector('form');
 form.addEventListener('submit', submitForm);
 function submitForm(e){
-e.preventDefault();
-const username = document.querySelector('#username').value;
-ipcRenderer.send('username', username);
+    e.preventDefault();
+    const username = document.querySelector('#username').value;
+    ipcRenderer.send('username', username);
 }

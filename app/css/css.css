@@ -26,15 +26,13 @@ div.centralTextMain{
 div.centralTextLogin{
   width: 70%;
   margin: auto;
-  text-align: left;
-  padding: 0em 1em 0em 1em;
+  text-align: center;
   font-size: 1em;
 }
 div.centralTextAbout{
   width: 80%;
   margin: auto;
   text-align: left;
-  padding: 0em 1em 0em 1em;
   font-size: 1em;
 }
 div.centralTextAbout div.centerAlign{
