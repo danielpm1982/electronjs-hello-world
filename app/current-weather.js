@@ -55,8 +55,9 @@ function submitForm(e){
     request.setHeader('Content-Type', 'application/json'); 
     request.end(); 
 }
-// Use the method below to substitute spaces for '+' on the city names with multiple words, in order to concatenate to the URL using the correct format
+// Use the method below to trim and to substitute internal name spaces for '+' on the city names with multiple words, in order to concatenate to the URL using the correct format
 function formatStringToURL(stringInitialValue){
+    stringInitialValue = stringInitialValue.trim();
     if(stringInitialValue.includes(' ')){
         let stringNameSplitArray = stringInitialValue.split(' ');
         let resultString='';
