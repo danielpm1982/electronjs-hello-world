@@ -107,7 +107,7 @@ export default class Main{
             Main.currentWeatherWin = null;
         });
         // Turn off visibility for menu on this window
-        // Main.currentWeatherWin.setMenuBarVisibility(false);
+        Main.currentWeatherWin.setMenuBarVisibility(false);
     }
     // Create current weather response window
     private static createCurrentWeatherResponseWindow(){
@@ -256,11 +256,11 @@ export default class Main{
             Main.currentWeatherWin.close();
             // Create the currentWeatherResponseWin window
             Main.createCurrentWeatherResponseWindow();
-            // Create 100ms delay, before sending weatherInfoObj to the response window, for avoiding sending before the window is even created
+            // Create 500ms delay, before sending weatherInfoObj to the response window, for avoiding sending before the window is even created
             setTimeout(() => {
                 // Send the weatherInfoObj for the currentWeatherResponseWin to catch - the window must already have been created !
                 Main.currentWeatherResponseWin.webContents.send('weatherInfoObj', weatherInfoObj); 
-            }, 100);
+            }, 500);
         });
     }
 }

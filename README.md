@@ -5,7 +5,7 @@ This is a sample app created with Node.js, npm, JavaScript ES6+, TypeScript and 
 This is a sample app created with Node.js, npm, JavaScript ES6+, TypeScript and Electron.js.<br>
 The objective of this project is simply to demonstrate how to use these technologies. This app basically access a REST weather API (OpenWeather - current weather), retrieves the result for the requested city and shows to the user.<br>
 It is a multi-platform desktop app that runs natively on Linux, Windows or iOS, according to the respective distro, and has the GUI components rendered by Electron from the html, css and .js files (compiled from the .ts files).<br>
-For running the sources of this app from VSCode you gotta have Node.js and npm installed globally at your OS. Then, after cloning this project, just go the directory and run npm install (to install the dependency modules at the project), then npm run tsc-compilate-project (to compile the .ts files to .js files) and then npm start (to start the app).<br>
+For running the sources of this app from VSCode you gotta have Node.js and npm installed globally at your OS. Then, after cloning this project, just go the directory and run npm install (to install the dependency modules at the project), then npm run tsc-compilate-project (to compile the .ts files to .js files... if on Windows use the tsc-compilate-project-win instead) and then npm start (to start the app).<br>
 For running an executable build, compiled to your OS, on the other hand, you have to create the build and the executable file yourself, by running one of the three commands below (according to your system):<br>
 npm run package-linux<br>
 npm run package-win<br>
