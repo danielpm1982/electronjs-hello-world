@@ -1,13 +1,15 @@
 {
   "name": "electronjs-hello-world",
-  "version": "1.0.0",
-  "description": "This is a sample app created with Nodejs (JavaScript runtime built on the V8 JavaScript engine), npm (node package manager) and Electronjs framework.",
-  "main": "main.js",
+  "version": "2.0.0",
+  "description": "This is a sample app created with Node.js, npm, JavaScript ES6+, TypeScript and Electron.js .",
+  "main": "app.js",
   "scripts": {
-    "start": "electron .",
+    "start": "electron app.js",
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=app/icon/iconMac.icns --prune=true --out=release-builds",
-    "package-win": "electron-packager . electronjs-hello-world-v1.0.0-app --overwrite --asar=true --platform=win32 --arch=ia32 --icon=app/icon/iconWin.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Electronjs Hello World App v.1.0.0\"",
-    "package-linux": "electron-packager . electronjs-hello-world-v1.0.0-app --overwrite --asar=true --platform=linux --arch=x64 --icon=app/icon/iconLinux.png --prune=true --out=release-builds"
+    "package-win": "electron-packager . electronjs-hello-world-v2.0.0-app --overwrite --asar=true --platform=win32 --arch=ia32 --icon=app/icon/iconWin.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Electronjs Hello World App v.2.0.0\"",
+    "package-linux": "electron-packager . electronjs-hello-world-v2.0.0-app --overwrite --asar=true --platform=linux --arch=x64 --icon=app/icon/iconLinux.png --prune=true --out=release-builds",
+    "tsc-initiate-project": "./node_modules/.bin/tsc --init",
+    "tsc-compilate-project": "./node_modules/.bin/tsc ./*.ts ./app/*.ts"
   },
   "repository": {
     "type": "git",
@@ -22,6 +24,7 @@
   "homepage": "https://github.com/danielpm1982/electronjs-hello-world#readme",
   "devDependencies": {
     "electron": "9.2.0",
-    "electron-packager": "^15.0.0"
+    "electron-packager": "^15.0.0",
+    "typescript": "^4.0.2"
   }
 }

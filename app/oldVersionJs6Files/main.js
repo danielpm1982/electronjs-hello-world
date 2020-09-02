@@ -258,6 +258,6 @@ ipcMain.on('weatherInfoObj', function(e, weatherInfoObj){
   // Create 100ms delay, before sending weatherInfoObj to the response window, for avoiding sending before the window is even created
   setTimeout(() => {
     // Send the weatherInfoObj for the currentWeatherResponseWin to catch - the window must already have been created !
-    currentWeatherResponseWin.webContents.send('weatherInfoObj', weatherInfoObj);  
+    currentWeatherResponseWin.webContents.send('weatherInfoObj', weatherInfoObj); 
   }, 100);
 })

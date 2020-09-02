@@ -3,6 +3,9 @@ References used so far to build this project:
 ECMAScript 6 - ECMAScript 2015<br>
 https://www.w3schools.com/Js/js_es6.asp
 
+ES6 Modules and How to Use Import and Export in JavaScript
+https://alligator.io/js/modules-es6/
+
 Electron.js<br>
 https://www.electronjs.org/
 
