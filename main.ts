@@ -102,9 +102,9 @@ export default class Main{
             Main.currentWeatherWin = null;
         });
         // Turn off visibility for menu on this window
-        // Main.currentWeatherWin.setMenuBarVisibility(false);
+        Main.currentWeatherWin.setMenuBarVisibility(false);
     }
-    // Create current weather response window
+    // Create current weather response window but not show it before the result is added (see configureOnWeatherInfoObj())
     private static createCurrentWeatherResponseWindow(){
         // Create the browser window
         Main.currentWeatherResponseWin = new BrowserWindow({
@@ -114,7 +114,8 @@ export default class Main{
             alwaysOnTop: true,
             webPreferences: {
                 nodeIntegration: true
-            }
+            },
+            show: false
         });
         // and load the respective web page to be rendered on the window
         Main.currentWeatherResponseWin.loadFile('app/current-weather-response.html');
@@ -123,7 +124,7 @@ export default class Main{
             Main.currentWeatherResponseWin = null;
         });
         // Turn off visibility for menu on this window
-        // Main.currentWeatherResponseWin.setMenuBarVisibility(false);
+        Main.currentWeatherResponseWin.setMenuBarVisibility(false);
     }
     //Create main menu template for the Menu to be built from
     private static createMainMenuTemplate(){
@@ -249,13 +250,15 @@ export default class Main{
         ipcMain.on('weatherInfoObj', function(e:Event, weatherInfoObj:WeatherInfoObjInterface){
             // Close the currentWeatherWin window when the weatherInfoObj is sent to the main.js
             Main.currentWeatherWin!.close();
-            // Create the currentWeatherResponseWin window
+            // Create the currentWeatherResponseWin window but not show it already
             Main.createCurrentWeatherResponseWindow();
-            // Create 500ms delay, before sending weatherInfoObj to the response window, for avoiding sending before the window is even created
-            setTimeout(() => {
-                // Send the weatherInfoObj for the currentWeatherResponseWin to catch - the window must already have been created !
-                Main.currentWeatherResponseWin!.webContents.send('weatherInfoObj', weatherInfoObj); 
-            }, 500);
+            // Once the currentWeatherResponseWin is ready to be shown (rendered but not yet shown), 
+            // send the weatherInfoObj for its .js file to catch, add that to the content of the
+            // window and only then show the final window to the user
+            Main.currentWeatherResponseWin!.once("ready-to-show", () => {
+                Main.currentWeatherResponseWin!.webContents.send('weatherInfoObj', weatherInfoObj);
+                Main.currentWeatherResponseWin!.show();
+            });
         });
     }
 }
