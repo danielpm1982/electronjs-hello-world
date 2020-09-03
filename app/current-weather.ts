@@ -1,10 +1,11 @@
 // Use Electron net module, from electron.remote, to send a GET request to the REST API, with the city and appid, and receive the local weather info response.
 // Use Electron ipcRenderer to send to the main.js the resulting weather info. From there, it's then sent to the currentWeatherResponseWindow window, for showing to the user.
+// const electron = require('electron');
+import { remote, ipcRenderer } from 'electron';
+const net = remote.net;
+import WeatherInfoObjInterface from './weather-info-obj-interface';
 class CurrentWeather{
     // Declare all properties and their types for CurrentWeather class as static and private
-    private static readonly electron:typeof Electron = require('electron');
-    private static readonly net:Electron.Net = CurrentWeather.electron.remote.net;
-    private static readonly ipcRenderer:Electron.IpcRenderer = CurrentWeather.electron.ipcRenderer;
     private static readonly form:HTMLFormElement = document.querySelector('form')! as HTMLFormElement;
     private static readonly cityInputElement:HTMLInputElement = document.querySelector('#city')! as HTMLInputElement;
     private static readonly maxTimeInMillisForResponse:number = 10000;
@@ -15,7 +16,6 @@ class CurrentWeather{
     private static readonly method:string = 'GET';
     private static readonly protocol:string = 'http:';
     private static readonly hostname:string = 'api.openweathermap.org';
-    private static path:string;
     private static request:Electron.ClientRequest;
     private static didRespond:boolean = false;
     private static weatherInfoObj: WeatherInfoObjInterface;
@@ -31,7 +31,7 @@ class CurrentWeather{
             // Get URL-formatted city name through formatStringToURL() method for later add to the ClientRequest
             this.cityFormattedToURL = Util.formatStringToURL(this.city);
             // Instantiate ClientRequest request through the net request() method
-            this.request = this.net.request({
+            this.request = net.request({
                 method: this.method,
                 protocol: this.protocol,
                 hostname: this.hostname,
@@ -60,7 +60,7 @@ class CurrentWeather{
             if(response.statusCode === 200){
                 response.on('data', (data:any) => { 
                     this.weatherInfoObj = JSON.parse(`${data}`);
-                    this.ipcRenderer.send('weatherInfoObj', this.weatherInfoObj);
+                    ipcRenderer.send('weatherInfoObj', this.weatherInfoObj);
                     this.didRespond = false;
                 });
             } else{
@@ -116,48 +116,6 @@ class Util{
             return stringInitialValue;
         }
     }    
-}
-interface WeatherInfoObjInterface{
-    coord: {
-        lon: number,
-        lat: number
-    },
-    weather: {
-        id: number,
-        main: string,
-        description: string,
-        icon: string}[]
-    ,
-    base: string,
-    main: {
-        temp: number,
-        feels_like: number,
-        temp_min: number,
-        temp_max: number,
-        pressure: number,
-        humidity: number
-    },
-    visibility: number,
-    wind: {
-        speed: number,
-        deg: number
-    },
-    clouds: {
-        all: number
-    },
-    dt: number,
-    sys: {
-        type: number,
-        id: number,
-        message: number,
-        country: string,
-        sunrise: number,
-        sunset: number
-    },
-    timezone: number,
-    id: number,
-    name: string,
-    cod: number
 }
 
 CurrentWeather.configure();

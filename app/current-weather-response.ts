@@ -1,9 +1,9 @@
 // Catches weatherInfoObj that was sent from the currentWeatherWin window to the main.js, and from there to here.
 // Applies the weatherInfo values, from the weatherInfoObj, to the the p#weatherInfo node element.
+import { ipcRenderer } from 'electron';
+import WeatherInfoObjInterface from './weather-info-obj-interface';
 class CurrentWeatherResponse{
     // Declare all properties and their types for CurrentWeatherResponse class as static and private
-    private static readonly electron:typeof Electron = require('electron');
-    private static readonly ipcRenderer:Electron.IpcRenderer = CurrentWeatherResponse.electron.ipcRenderer;
     private static readonly pElement:HTMLParagraphElement = document.querySelector('#weatherInfo')! as HTMLParagraphElement;
     private static city:string;
     private static country:string;
@@ -28,7 +28,7 @@ class CurrentWeatherResponse{
     }
     // Configure the action for the receiving of the weatherInfoObj, from the main process, and basically show the parameter values to the user at the pElement
     private static configureShowResultAction():void{
-        this.ipcRenderer.on('weatherInfoObj', (e:Event, weatherInfoObj:WeatherInfoObjInterface)=>{
+        ipcRenderer.on('weatherInfoObj', (e:Event, weatherInfoObj:WeatherInfoObjInterface)=>{
             this.city = `city: ${weatherInfoObj.name}`;
             this.country = `country: ${weatherInfoObj.sys.country}`;
             this.coord = `coordinates: latitude ${weatherInfoObj.coord.lat} longitude ${weatherInfoObj.coord.lon}`;
@@ -70,49 +70,6 @@ class DateTimeUtil{
             time: timeString
         }
     }
-}
-// This interface should be imported from current-weather.ts when the typescript modules are configured at this project
-interface WeatherInfoObjInterface{
-    coord: {
-        lon: number,
-        lat: number
-    },
-    weather: {
-        id: number,
-        main: string,
-        description: string,
-        icon: string}[]
-    ,
-    base: string,
-    main: {
-        temp: number,
-        feels_like: number,
-        temp_min: number,
-        temp_max: number,
-        pressure: number,
-        humidity: number
-    },
-    visibility: number,
-    wind: {
-        speed: number,
-        deg: number
-    },
-    clouds: {
-        all: number
-    },
-    dt: number,
-    sys: {
-        type: number,
-        id: number,
-        message: number,
-        country: string,
-        sunrise: number,
-        sunset: number
-    },
-    timezone: number,
-    id: number,
-    name: string,
-    cod: number
 }
 
 CurrentWeatherResponse.configure();
