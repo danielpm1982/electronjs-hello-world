@@ -3,8 +3,8 @@
 // On logout, reset the original text and color.
 class Index{
   // Declare all properties and their types for Index class as static and private
-  private static readonly electron:any = require('electron');
-  private static readonly ipcRenderer:any = Index.electron.ipcRenderer;
+  private static readonly electron:typeof Electron = require('electron');
+  private static readonly ipcRenderer:Electron.IpcRenderer = Index.electron.ipcRenderer;
   private static readonly spanElement:HTMLSpanElement = document.querySelector('span')!;
   // Declare the only public method accessable and visible from outside this class (see the end of this file), which triggers the call to all private methods
   public static configure():void{
@@ -20,7 +20,7 @@ class Index{
   }
   // Configure the action for the receiving of the logout command, from the main process, and basically reset the view to the original aspect
   private static configureLogoutAction():void{
-    this.ipcRenderer.on('logout', (Event:any)=>{
+    this.ipcRenderer.on('logout', (e:Event)=>{
       this.spanElement.innerHTML = 'World';
       this.spanElement.style.color = 'white';
     });

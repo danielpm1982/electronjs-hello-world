@@ -2,8 +2,8 @@
 // Validation of password not yet implemented - no authentication actually occurs, only a simulation of it - for now...
 class Login{
     // Declare all properties and their types for Login class as static and private
-    private static readonly electron:any = require('electron');
-    private static readonly ipcRenderer:any = Login.electron.ipcRenderer;
+    private static readonly electron:typeof Electron = require('electron');
+    private static readonly ipcRenderer:Electron.IpcRenderer = Login.electron.ipcRenderer;
     private static readonly form:HTMLFormElement = document.querySelector('form')! as HTMLFormElement;
     private static readonly usernameInputElement:HTMLInputElement = document.querySelector('#username')! as HTMLInputElement;
     private static username:string;

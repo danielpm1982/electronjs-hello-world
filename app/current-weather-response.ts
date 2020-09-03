@@ -2,8 +2,8 @@
 // Applies the weatherInfo values, from the weatherInfoObj, to the the p#weatherInfo node element.
 class CurrentWeatherResponse{
     // Declare all properties and their types for CurrentWeatherResponse class as static and private
-    private static readonly electron:any = require('electron');
-    private static readonly ipcRenderer:any = CurrentWeatherResponse.electron.ipcRenderer;
+    private static readonly electron:typeof Electron = require('electron');
+    private static readonly ipcRenderer:Electron.IpcRenderer = CurrentWeatherResponse.electron.ipcRenderer;
     private static readonly pElement:HTMLParagraphElement = document.querySelector('#weatherInfo')! as HTMLParagraphElement;
     private static city:string;
     private static country:string;

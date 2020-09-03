@@ -2,9 +2,9 @@
 // Use Electron ipcRenderer to send to the main.js the resulting weather info. From there, it's then sent to the currentWeatherResponseWindow window, for showing to the user.
 class CurrentWeather{
     // Declare all properties and their types for CurrentWeather class as static and private
-    private static readonly electron:any = require('electron');
-    private static readonly ipcRenderer:any = CurrentWeather.electron.ipcRenderer;
-    private static readonly net:any = CurrentWeather.electron.remote.net;
+    private static readonly electron:typeof Electron = require('electron');
+    private static readonly net:Electron.Net = CurrentWeather.electron.remote.net;
+    private static readonly ipcRenderer:Electron.IpcRenderer = CurrentWeather.electron.ipcRenderer;
     private static readonly form:HTMLFormElement = document.querySelector('form')! as HTMLFormElement;
     private static readonly cityInputElement:HTMLInputElement = document.querySelector('#city')! as HTMLInputElement;
     private static readonly maxTimeInMillisForResponse:number = 10000;
@@ -16,7 +16,7 @@ class CurrentWeather{
     private static readonly protocol:string = 'http:';
     private static readonly hostname:string = 'api.openweathermap.org';
     private static path:string;
-    private static request:any;
+    private static request:Electron.ClientRequest;
     private static didRespond:boolean = false;
     private static weatherInfoObj: WeatherInfoObjInterface;
     // Declare the only public method accessable and visible from outside this class (see the end of this file), which triggers the call to all private methods

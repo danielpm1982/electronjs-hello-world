@@ -1,22 +1,16 @@
+import { app, BrowserWindow, Menu, ipcMain } from 'electron';
 export default class Main{
     // Declare all properties and their types for Main class as static and private
-    private static electron:any;
-    private static app:any;
-    private static BrowserWindow:any;
-    private static Menu:any;
-    private static ipcMain:any;
-    private static win:any;
-    private static loginWin:any;
-    private static aboutWin:any;
-    private static currentWeatherWin:any;
-    private static currentWeatherResponseWin:any;
+    private static mainWin:Electron.BrowserWindow|null;
+    private static loginWin:Electron.BrowserWindow|null;
+    private static aboutWin:Electron.BrowserWindow|null;
+    private static currentWeatherWin:Electron.BrowserWindow|null;
+    private static currentWeatherResponseWin:Electron.BrowserWindow|null;
+    private static mainMenu:Electron.Menu;
     private static mainMenuTemplate:object[];
+
     // Declare the only public method accessable and visible from outside this class (see app.ts file), through which the Electron modules/objects are injected from the app.ts and triggers the call to all private methods
-    public static start(app:any, BrowserWindow:any, Menu:any, ipcMain:any){
-        Main.app = app;
-        Main.BrowserWindow = BrowserWindow;
-        Main.Menu = Menu;
-        Main.ipcMain = ipcMain;
+    public static start(){
         Main.createMainMenuTemplate();
         Main.configureOnReady();
         Main.configureOnWindowAllClosed();
@@ -27,7 +21,7 @@ export default class Main{
     // Create main app window
     private static createMainWindow () {
       // Create the browser window
-      Main.win = new Main.BrowserWindow({
+      Main.mainWin = new BrowserWindow({
         width: 1000,
         height: 700,
         resizable: false,
@@ -36,20 +30,20 @@ export default class Main{
         }
       });
       // and load the respective web page to be rendered on the window
-      Main.win.loadFile('app/index.html');
+      Main.mainWin.loadFile('app/index.html');
       // Quit app when this main window closes
-      Main.win.on('closed', function(){
-        Main.app.quit();
+      Main.mainWin.on('closed', function(){
+        app.quit();
       });
       //Create main menu from template
-      const mainMenu = Main.Menu.buildFromTemplate(Main.mainMenuTemplate);
+      Main.mainMenu = Menu.buildFromTemplate(Main.mainMenuTemplate);
       //Insert menu
-      Main.Menu.setApplicationMenu(mainMenu);
+      Menu.setApplicationMenu(Main.mainMenu);
     }
     // Create login window
     private static createLoginWindow(){
         // Create the browser window
-        Main.loginWin = new Main.BrowserWindow({
+        Main.loginWin = new BrowserWindow({
             width: 850,
             height: 550,
             resizable: false,
@@ -70,7 +64,7 @@ export default class Main{
     // Create about window
     private static createAboutWindow(){
         // Create the browser window
-        Main.aboutWin = new Main.BrowserWindow({
+        Main.aboutWin = new BrowserWindow({
             width: 800,
             height: 520,
             resizable: false,
@@ -91,7 +85,7 @@ export default class Main{
     // Create current weather window
     private static createCurrentWeatherWindow(){
         // Create the browser window
-        Main.currentWeatherWin = new Main.BrowserWindow({
+        Main.currentWeatherWin = new BrowserWindow({
             width: 800,
             height: 520,
             resizable: false,
@@ -107,12 +101,12 @@ export default class Main{
             Main.currentWeatherWin = null;
         });
         // Turn off visibility for menu on this window
-        Main.currentWeatherWin.setMenuBarVisibility(false);
+        // Main.currentWeatherWin.setMenuBarVisibility(false);
     }
     // Create current weather response window
     private static createCurrentWeatherResponseWindow(){
         // Create the browser window
-        Main.currentWeatherResponseWin = new Main.BrowserWindow({
+        Main.currentWeatherResponseWin = new BrowserWindow({
             width: 700,
             height: 860,
             resizable: false,
@@ -128,7 +122,7 @@ export default class Main{
             Main.currentWeatherResponseWin = null;
         });
         // Turn off visibility for menu on this window
-        Main.currentWeatherResponseWin.setMenuBarVisibility(false);
+        // Main.currentWeatherResponseWin.setMenuBarVisibility(false);
     }
     //Create main menu template for the Menu to be built from
     private static createMainMenuTemplate(){
@@ -147,14 +141,14 @@ export default class Main{
                         label: 'Logout',
                         accelerator: process.platform == 'darwin' ? 'Command+O': 'Ctrl+O',
                         click(){
-                            Main.win.webContents.send('logout');
+                            Main.mainWin!.webContents.send('logout');
                         }
                     },
                     {
                         label: 'Quit',
                         accelerator: process.platform == 'darwin' ? 'Command+Q': 'Ctrl+Q',
                         click(){
-                            Main.app.quit();
+                            app.quit();
                         }
                     }
                 ]
@@ -215,15 +209,15 @@ export default class Main{
     // Configure app onReady event listener to execute createMainWindow method when Electron 
     // has finished initializing
     private static configureOnReady(){
-        Main.app.whenReady().then(Main.createMainWindow);
+        app.whenReady().then(Main.createMainWindow);
     }
     //Configure app window-all-closed event listener to quit the app (except if on macOS) when all 
     // windows are closed. There, it's common for applications and their menu bar to stay active 
     // until the user quits explicitly with Cmd + Q.
     private static configureOnWindowAllClosed(){
-        Main.app.on('window-all-closed', () => {
+        app.on('window-all-closed', () => {
             if (process.platform !== 'darwin') {
-                Main.app.quit()
+                app.quit()
             }
         });
     }
@@ -231,8 +225,8 @@ export default class Main{
     // On macOS it's common to re-create a window in the app when the dock icon is clicked and 
     // there are no other windows open.
     private static configureOnActivate(){
-        Main.app.on('activate', () => {
-            if (Main.BrowserWindow.getAllWindows().length === 0) {
+        app.on('activate', () => {
+            if (BrowserWindow.getAllWindows().length === 0) {
                 Main.createMainWindow()
             }
         });
@@ -241,25 +235,25 @@ export default class Main{
     // Catch username sent from loginWin window and send for the main win window to catch
     // Validation of password not yet implemented - no authentication actually occurs, only a simulation of it - for now...
     private static configureOnUserName(){
-        Main.ipcMain.on('username', function(e:Event, username:string){
+        ipcMain.on('username', function(e:Event, username:string){
             // Close the loginWin window when the form data is already sent to the main.js
-            Main.loginWin.close();
+            Main.loginWin!.close();
             // Send the username for the main win window to catch
-            Main.win.webContents.send('username', username);
+            Main.mainWin!.webContents.send('username', username);
         });
     }
     // Configure the ipcMain weatherInfoObj catch event
     // Catch weatherInfoObj sent from currentWeatherWin window and send for the currentWeatherResponseWin window to catch
     private static configureOnWeatherInfoObj(){
-        Main.ipcMain.on('weatherInfoObj', function(e:Event, weatherInfoObj:WeatherInfoObjInterface){
+        ipcMain.on('weatherInfoObj', function(e:Event, weatherInfoObj:WeatherInfoObjInterface){
             // Close the currentWeatherWin window when the weatherInfoObj is sent to the main.js
-            Main.currentWeatherWin.close();
+            Main.currentWeatherWin!.close();
             // Create the currentWeatherResponseWin window
             Main.createCurrentWeatherResponseWindow();
             // Create 500ms delay, before sending weatherInfoObj to the response window, for avoiding sending before the window is even created
             setTimeout(() => {
                 // Send the weatherInfoObj for the currentWeatherResponseWin to catch - the window must already have been created !
-                Main.currentWeatherResponseWin.webContents.send('weatherInfoObj', weatherInfoObj); 
+                Main.currentWeatherResponseWin!.webContents.send('weatherInfoObj', weatherInfoObj); 
             }, 500);
         });
     }
