@@ -13,6 +13,15 @@ npm run package-mac<br>
 .<br>
 Later, go to the folder of the distro and run the executable file - e.g.: ./electronjs-hello-world-v2.0.0-app if on Linux or clicking twice on the .exe file if on Windows.
 
+For a deployed Web version of this project, as a web app (with no Electron):<br>
+http://danielpm1982.com/public/open-weather-client/index.html
+
+The above Web version sources:<br>
+https://github.com/danielpm1982/open-weather-client-web/releases
+
+For a Multi-Platform Desktop version of this app, using Electron.js, Vue.js and TypeScript:<br>
+https://github.com/danielpm1982/open-weather-client/releases
+
 For more about it, see the references, used to create this project, at:<br>
 https://github.com/danielpm1982/electronjs-hello-world/blob/master/references.md
 
